@@ -1,0 +1,974 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>RESTful service with CFX</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="63faed70-795c-40be-9a8b-72c821713028" class="page sans"><header><h1 class="page-title">RESTful service with CFX</h1></header><div class="page-body"><p id="dda83e21-a44a-491d-a67a-8b9e416782d7" class="">
+</p><figure id="69061425-d4fb-42f3-ba2c-0f9796884af6" class="image"><a href="RESTful service with CFX/Untitled.png"><img style="width:288px" src="RESTful service with CFX/Untitled.png"/></a></figure><h2 id="d1b4be8e-6dd6-48ed-87a5-0d80b2934a9a" class="">Guide</h2><p id="d5aebd3d-1227-426e-a363-66d75c732a28" class="">
+</p><p id="9ce0f7a1-846a-47b0-8aa2-81fd59d406e7" class=""><strong>Server</strong></p><p id="35418682-7083-4c86-bb02-43ec61ef7a40" class=""><strong>Per aggiungere servizi</strong></p><p id="b76bc89f-9830-449f-abd6-e8faea0fd736" class="">Progetto (tasto dx) New -&gt; Web Services -&gt; RESTful Web Services from Patterns -&gt; Client-Controlled</p><p id="c2f68cdc-19c8-4c92-bf29-5e7a8c2f3ebb" class="">Specificare nomi, package, container e MIME (tipo return)</p><p id="5c870bc2-ab2c-4161-a416-1bd14e1f5108" class="">Non modificare ApplicationConfig</p><p id="6e6fdb00-7dcb-45aa-84b3-070f5f9e329e" class="">OggettoResource è il singolo oggetto</p><p id="5d0d1cef-3319-48e7-9cf8-173e5c7e3cd1" class="">Implementa GET, PUT (update) e DELETE</p><p id="828d1c8e-fdaf-4aab-a36d-47cba89678f2" class="">OggettosResource è la collezione</p><p id="01076df7-bcd1-4a5f-91c9-615446516e1f" class="">Implementa GET, POST (new elem) e quasi mai DELETE (purga la collezione)</p><p id="38c417f2-35d8-4bfe-9d2c-29e4b64bce59" class="">
+</p><p id="162f0e9d-3519-44c2-ad16-d0514294ce11" class=""><strong>Client</strong></p><p id="18f5b059-afb9-4884-aec4-7b4af012acfa" class="">New Project -&gt; Java -&gt; JavaApplication</p><p id="35074609-cb7f-4dd9-b1eb-0a7bc67b469d" class="">Aggiungere le librerie JAX-RS 2.0 e Jersey 2.5.1 da</p><p id="b9c699dd-c072-4f33-96ba-274e312df7ee" class="">Client -&gt; Libraries -&gt; Add Library</p><p id="861690c4-6748-44e7-815b-16c103bb6668" class="">Per aggiungere client</p><p id="f2834820-37d3-4807-998c-3767e0508421" class="">Progetto (tasto dx) New -&gt; Restful Java Client</p><p id="0815b3f5-fc21-40dc-9ceb-074be58f0752" class="">Inserire nomee package</p><p id="2b13d407-8ada-45d8-b220-5fb85d62ca06" class="">Select Rest Resource, selezionare &quot;From Project&quot;, browse nel server</p><p id="8f1ed657-80ef-4861-9683-01bb2f6f0bdc" class="">Modificare il main</p><p id="3d02ef02-e89e-4a62-9e73-09f135165ad7" class="">Se si usa un database</p><p id="bdda02f3-32af-4f5a-8e9e-6c07c3876e8c" class="">I dati vengono acceduti attraverso query</p><p id="f1b48d6e-0d97-4b70-a56b-7316921ebd49" class="">Usare la libreria sqlite-jdbc</p><p id="ad087c59-02f4-46ca-8be3-7894d28418b5" class="">Alla creazione del database è necessario assegnare un path &quot;jdbc:sqlite:/home/biar/RESTWS-database&quot;</p><p id="5ccf1706-6a03-4bde-bbba-3b1811d709e5" class="">Per le altre operazioni copiare e incollare dal creatore del database</p><p id="6e2dd172-7fc7-4a61-9296-331f0602eb72" class="">Nota sui prepared statement</p><p id="a7810542-28b3-44db-8d5d-97ccc26c0e56" class="">Inserimento dati - &quot;insert into nomeTabella values (?, ?, ?);&quot;</p><p id="74563381-633a-494d-85b9-c063f10dbbff" class="">Modifica dati - &quot;UPDATE professor SET name = ? , surname = ? WHERE id = ?&quot;</p><p id="79287d9a-14c4-487e-9c8e-8f4395ef39c8" class="">Cancellazione dati - &quot;DELETE FROM professor WHERE id = ?&quot;</p><p id="eff5fef9-21bc-4812-962b-008f25d981f7" class="">
+</p><h3 id="933caf81-7c19-452d-b7d9-b1129e019756" class="">Server</h3><pre id="f10cd2f2-fe24-4ab2-81d3-7fbb4e100371" class="code"><code>@XmlRootElement(name = &quot;Course&quot;)
+public class Course {
+	
+		@GET
+    @Path(&quot;{studentId}&quot;)
+    public Student getStudent(@PathParam(&quot;studentId&quot;)int studentId) {
+        return findById(studentId);
+    }
+
+		@POST
+    @Path(&quot;&quot;)
+    public Response createStudent(Student student) {
+        for (Student element : students) {
+            if (element.getId() == student.getId()) {
+                return Response.status(Response.Status.CONFLICT).build();
+            }
+        }
+        students.add(student);
+        return Response.ok(student).build();
+    }
+    
+    @DELETE
+    @Path(&quot;{studentId}&quot;)
+    public Response deleteStudent(@PathParam(&quot;studentId&quot;) int studentId) {
+        Student student = findById(studentId);
+        if (student == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        students.remove(student);
+        return Response.ok().build();
+    }
+
+}</code></pre><h3 id="747d3f1f-456d-4a90-8e72-a6b179b15d0b" class="">Client</h3><p id="a62d45c2-54d6-4ec4-9d5b-e2b83c8656e4" class="">Creare classi di cui si ha bisogno (esempio Course e Student)</p><pre id="d94656db-336a-4d2b-9adc-0a38f298a6da" class="code"><code>WebClient client = WebClient.create(&quot;http://localhost:8080/course&quot;);
+
+//GET course
+Course course = client.path(&quot;courses/1&quot;).accept(&quot;text/xml&quot;).get().readEntity(Course.class);
+System.out.println(course.getName());
+
+//POST student
+Student student = new Student();
+student.setId(100);
+student.setName(&quot;MASSIMO DECIMO MECELLO&quot;);
+Response r = client.path(&quot;students&quot;).post(student);
+System.out.println(r.getStatus());</code></pre><h2 id="9bf2b8df-11e5-4caf-8a27-e9f7efac021f" class="">Server</h2><p id="3267bbe5-bf87-4a34-bc9e-0d23e9ac2b36" class="">
+</p><h3 id="adc5eb10-34fe-46cf-9a1b-5232275a463a" class="">Main</h3><pre id="e77b5522-77cb-4afc-948c-c1fd1a8a8302" class="code"><code>public class MyServer {
+    public static void main(String[] args) throws Exception{
+        JAXRSServerFactoryBean factoryBean = new JAXRSServerFactoryBean();
+        factoryBean.setResourceClasses(CourseRepository.class);
+        factoryBean.setResourceProvider(new SingletonResourceProvider(new CourseRepository()));
+        factoryBean.setAddress(&quot;http://localhost:8080/&quot;);	
+        Server server = factoryBean.create();
+    }
+}</code></pre><h3 id="692752ff-7631-4012-b503-17beb02bb6d5" class="">CourseRepository</h3><pre id="2fe96add-3789-4f25-afd1-caf3fa0c8858" class="code"><code>@Path(&quot;course&quot;)
+@Produces(&quot;text/xml&quot;)
+public class CourseRepository {
+    private Map&lt;Integer, Course&gt; courses = new HashMap&lt;&gt;();
+    
+    public CourseRepository(){
+        Student student1 = new Student();
+        Student student2 = new Student();
+        student1.setId(1);
+        student1.setName(&quot;Student A&quot;);
+        student2.setId(2);
+        student2.setName(&quot;Student B&quot;);
+
+        List&lt;Student&gt; course1Students = new ArrayList&lt;&gt;();
+        course1Students.add(student1);
+        course1Students.add(student2);
+
+        Course course1 = new Course();
+        Course course2 = new Course();
+        course1.setId(1);
+        course1.setName(&quot;REST with Spring&quot;);
+        course1.setStudents(course1Students);
+        course2.setId(2);
+        course2.setName(&quot;Learn Spring Security&quot;);
+
+        courses.put(1, course1);
+        courses.put(2, course2);
+    }
+
+    @GET
+    @Path(&quot;courses/{courseId}&quot;)
+    public Course getCourse(@PathParam(&quot;courseId&quot;) int courseId) {
+        return findById(courseId);
+    }
+    
+    @PUT
+    @Path(&quot;courses/{courseId}&quot;)
+    public Response updateCourse(@PathParam(&quot;courseId&quot;) int courseId, Course course) {
+        Course existingCourse = findById(courseId);        
+        if (existingCourse == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (existingCourse.equals(course)) {
+            return Response.notModified().build();    
+        }
+        courses.put(courseId, course);
+        return Response.ok().build();
+    }
+    
+    @Path(&quot;courses/{courseId}/students&quot;)
+    public Course pathToStudent(@PathParam(&quot;courseId&quot;) int courseId) {
+        return findById(courseId);
+    }
+ 
+    private Course findById(int id) {
+        for (Map.Entry&lt;Integer, Course&gt; course : courses.entrySet()) {
+            if (course.getKey() == id) {
+                return course.getValue();
+            }
+        }
+        return null;
+    }
+}</code></pre><h3 id="c5a6b051-48c5-4498-a3ec-265f8d526bbe" class="">Student</h3><pre id="21f36867-c3b4-4fd0-9977-7650053d9096" class="code"><code>@XmlRootElement(name = &quot;Student&quot;)
+public class Student {
+    private int id;
+    private String name;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + this.id;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+    
+}</code></pre><h3 id="7fb6a3b7-d312-447e-a34d-cbf1d932a3ac" class="">Course</h3><pre id="74e021c0-df9d-4632-a4b7-822fabdbb09a" class="code"><code>@XmlRootElement(name = &quot;Course&quot;)
+public class Course {
+    private int id;
+    private String name;
+    private List&lt;Student&gt; students = new ArrayList&lt;&gt;();
+    
+    @GET
+    @Path(&quot;{studentId}&quot;)
+    public Student getStudent(@PathParam(&quot;studentId&quot;)int studentId) {
+        return findById(studentId);
+    }
+    
+    @POST
+    @Path(&quot;&quot;)
+    public Response createStudent(Student student) {
+        for (Student element : students) {
+            if (element.getId() == student.getId()) {
+                return Response.status(Response.Status.CONFLICT).build();
+            }
+        }
+        students.add(student);
+        return Response.ok(student).build();
+    }
+    
+    @DELETE
+    @Path(&quot;{studentId}&quot;)
+    public Response deleteStudent(@PathParam(&quot;studentId&quot;) int studentId) {
+        Student student = findById(studentId);
+        if (student == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        students.remove(student);
+        return Response.ok().build();
+    }
+ 
+    private Student findById(int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List&lt;Student&gt; getStudents() {
+        return students;
+    }
+
+    public void setStudents(List&lt;Student&gt; students) {
+        this.students = students;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.students);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Course other = (Course) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.students, other.students)) {
+            return false;
+        }
+        return true;
+    }
+    
+}</code></pre><p id="948a041d-990e-42be-a8b6-d1ec6b94e8ab" class="">
+</p><h2 id="70aaacec-ed93-4e8d-ae63-da86e84c9393" class="">Client</h2><h3 id="fdc5e245-ae35-4ad7-b56b-766fe72827cd" class="">Main</h3><pre id="864bcae4-c6f8-4c28-841e-338d7bc5a3d1" class="code"><code>public class MyClient {
+    public static void main(String[] args) throws Exception{
+        WebClient client = WebClient.create(&quot;http://localhost:8080/course&quot;);
+        
+        //GET course
+        Course course = client.path(&quot;courses/1&quot;).accept(&quot;text/xml&quot;).get().readEntity(Course.class);
+        System.out.println(course.getName());
+        
+        //POST student
+        Student student = new Student();
+        student.setId(100);
+        student.setName(&quot;MASSIMO DECIMO MECELLO&quot;);
+        Response r = client.path(&quot;students&quot;).post(student);
+        System.out.println(r.getStatus());
+        
+        //GET student
+        Student mecello = client.path(&quot;100&quot;).get().readEntity(Student.class);
+        System.out.println(mecello.getName());
+        
+    }
+}</code></pre><h3 id="6d42e7e6-2160-4c44-bc17-e0290e67d0aa" class="">Student</h3><pre id="2c55e111-5225-4999-8182-6b17cc815b13" class="code"><code>@XmlRootElement(name = &quot;Student&quot;)
+public class Student {
+    private int id;
+    private String name;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + this.id;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }   
+}</code></pre><h3 id="1d158c11-47ef-4026-bddd-d09ff8ac08a6" class="">Course</h3><pre id="3dcdc4cb-06c4-4c1c-b4d8-dee308248e07" class="code"><code>@XmlRootElement(name = &quot;Course&quot;)
+public class Course {
+    private int id;
+    private String name;
+    private List&lt;Student&gt; students = new ArrayList&lt;&gt;();
+
+    private Student findById(int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List&lt;Student&gt; getStudents() {
+        return students;
+    }
+
+    public void setStudents(List&lt;Student&gt; students) {
+        this.students = students;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.students);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Course other = (Course) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.students, other.students)) {
+            return false;
+        }
+        return true;
+    }
+    
+}</code></pre></div></article></body></html>

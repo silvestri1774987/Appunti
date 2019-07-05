@@ -1,0 +1,921 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>RabbitMQ</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4b3e1db3-ce30-4805-a2ac-b71d49a28b92" class="page sans"><header><h1 class="page-title">RabbitMQ</h1></header><div class="page-body"><p id="8cb21eee-3fef-4f3b-985a-5179622d2f9a" class="">
+</p><figure id="0cb470f6-3ed2-4856-adf1-a2999d516e7d" class="image"><a href="RabbitMQ/Untitled.png"><img style="width:240px" src="RabbitMQ/Untitled.png"/></a></figure><h2 id="2da9a61a-e3be-4e64-a6cd-c7bd4a8fc4b4" class="">Guide</h2><h3 id="e1e72737-5049-4140-bf84-97c611adb4ad" class="">Server</h3><pre id="d133bbc2-074a-4e29-ba96-4d0d5a454f5b" class="code"><code>@XmlRootElement(name = &quot;Catalog&quot;)
+public class Catalog {
+    private static List&lt;String&gt; catalogList;
+    private final static String queueName = &quot;CATZ_CATALOG&quot;;
+    private final static String queueNameRet = &quot;CATZ_CATALOG_RET&quot;;
+    private String message = &quot;DammeErCatalogo&quot;;
+    private String messageRet;
+
+		@GET
+    @Path(&quot;catalog&quot;)
+    public List&lt;String&gt; getCatalog() throws Exception{
+        //SEND MESSAGE
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;127.0.0.1&quot;);
+        try (Connection connection = factory.newConnection();
+            Channel channel = connection.createChannel()) {
+                channel.queueDeclare(queueName, false, false, false, null);
+                channel.basicPublish(&quot;&quot;, queueName, null, message.getBytes());
+            }
+        
+        //RECEIVE RESPONSE
+        ConnectionFactory factoryRet = new ConnectionFactory();
+        factoryRet.setHost(&quot;127.0.0.1&quot;);
+        Connection connectionRet = factoryRet.newConnection();
+        Channel channel = connectionRet.createChannel();
+        channel.queueDeclare(queueNameRet, false, false, false, null);
+        DeliverCallback deliverCallback = (consumerTag, delivery) -&gt; {
+            String messageRet = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received &#x27;&quot; + messageRet + &quot;&#x27;&quot;);
+            this.messageRet = messageRet;
+        };
+        channel.basicConsume(queueNameRet, true, deliverCallback, consumerTag -&gt; { });
+        return new ArrayList&lt;&gt;();
+    }
+
+}</code></pre><h3 id="7bce9efc-b8e2-4322-911a-d0624c2f31d2" class="">Client</h3><pre id="b73ef64f-9f3c-450e-a1de-941a3daca89a" class="code"><code>public class CatalogMS {
+    private final static String QUEUE_NAME = &quot;CATZ_CATALOG&quot;;
+    private final static String QUEUE_NAME_RET = &quot;CATZ_CATALOG_RET&quot;;
+    private final static String HOST = &quot;127.0.0.1&quot;;
+
+    public static void main(String[] argv) throws Exception {
+        
+        //CONNECTION
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(HOST);
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+
+        // RECEIVE QUEUE
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        System.out.println(&quot; [*] Waiting for messages. To exit press CTRL+C&quot;);
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -&gt; {
+            String message = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received &#x27;&quot; + message + &quot;&#x27;&quot;);
+            if(message.equals(&quot;DammeErCatalogo&quot;)){
+                System.out.println(&quot;\t-&gt;Sending Catalog&quot;);
+                channel.basicPublish(&quot;&quot;, QUEUE_NAME_RET, null,jcat.toString().getBytes(&quot;UTF-8&quot;));
+            System.out.println(&quot; [x] Sent &#x27;&quot; + message + &quot;&#x27;&quot;);
+                
+            }
+        };
+        // SEND QUEUE
+            channel.queueDeclare(QUEUE_NAME_RET, false, false, false, null);
+            
+        // START CONSUME
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -&gt; { });
+        
+    }
+}</code></pre><p id="2e6dc5bf-7523-49d8-8226-32f8ec3a423b" class="">
+</p><h2 id="94c6beaf-1afa-474a-81d0-e84f0b11bda3" class="">Server</h2><h3 id="1f253418-9f90-44b8-afdd-0eb9ea8c1bea" class="">Main</h3><pre id="c9b8badb-9179-466a-b05b-acdf17280806" class="code"><code>public class ServerMain {
+    public static void main(String[] args) throws Exception{
+        Identity auth = new Identity();
+        Catalog catalogo = new Catalog();
+        auth.getToken();
+        catalogo.getCatalog();
+    }
+}</code></pre><h3 id="b93ca6ae-3967-4fa2-96c2-17d806aac321" class="">Catalog</h3><pre id="38ad5c73-c2ad-4570-992a-b7d90d3320f6" class="code"><code>@XmlRootElement(name = &quot;Catalog&quot;)
+public class Catalog {
+    private static List&lt;String&gt; catalogList;
+    //private final Channel queue;
+    //private final Channel queueRet;
+    private final static String queueName = &quot;CATZ_CATALOG&quot;;
+    private final static String queueNameRet = &quot;CATZ_CATALOG_RET&quot;;
+    private String message = &quot;DammeErCatalogo&quot;;
+    private String messageRet;
+
+    public static List&lt;String&gt; getCatalogList() {
+        return catalogList;
+    }
+
+    public static void setCatalogList(List&lt;String&gt; catalogList) {
+        Catalog.catalogList = catalogList;
+    }
+    
+    @GET
+    @Path(&quot;catalog&quot;)
+    public List&lt;String&gt; getCatalog() throws Exception{
+        //SEND MESSAGE
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.49.81&quot;);
+        try (Connection connection = factory.newConnection();
+            Channel channel = connection.createChannel()) {
+                channel.queueDeclare(queueName, false, false, false, null);
+                //queue = channel;
+                channel.basicPublish(&quot;&quot;, queueName, null, message.getBytes());
+            }
+        
+        //RECEIVE RESPONSE
+        ConnectionFactory factoryRet = new ConnectionFactory();
+        factoryRet.setHost(&quot;192.168.49.81&quot;);
+        Connection connectionRet = factoryRet.newConnection();
+        Channel channel = connectionRet.createChannel();
+        channel.queueDeclare(queueNameRet, false, false, false, null);
+        DeliverCallback deliverCallback = (consumerTag, delivery) -&gt; {
+            String messageRet = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received &#x27;&quot; + messageRet + &quot;&#x27;&quot;);
+            this.messageRet = messageRet;
+        };
+        channel.basicConsume(queueNameRet, true, deliverCallback, consumerTag -&gt; { });
+        return new ArrayList&lt;&gt;();
+    }
+
+}</code></pre><h3 id="067ed95a-d0bc-477f-966c-a6560122ec39" class="">Identity</h3><pre id="e86a3cb9-43a2-44e6-8ac3-6538a3bb46f0" class="code"><code>@XmlRootElement(name = &quot;Identity&quot;)
+public class Identity {
+    private final static String queueName = &quot;CATZ_AUTH&quot;;
+    private final static String queueNameRet = &quot;CATZ_AUTH_RET&quot;;
+    private String message = &quot;user:pw&quot;;
+    private String messageRet;
+    
+    public void getToken() throws Exception{
+        //SEND MESSAGE
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.49.81&quot;);
+        try (Connection connection = factory.newConnection();
+            Channel channel = connection.createChannel()) {
+                channel.queueDeclare(queueName, false, false, false, null);
+                //queue = channel;
+                channel.basicPublish(&quot;&quot;, queueName, null, message.getBytes());
+            }
+        
+        //RECEIVE RESPONSE
+        ConnectionFactory factoryRet = new ConnectionFactory();
+        factoryRet.setHost(&quot;192.168.49.81&quot;);
+        Connection connectionRet = factoryRet.newConnection();
+        Channel channel = connectionRet.createChannel();
+        channel.queueDeclare(queueNameRet, false, false, false, null);
+        DeliverCallback deliverCallback = (consumerTag, delivery) -&gt; {
+            String messageRet = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received &#x27;&quot; + messageRet + &quot;&#x27;&quot;);
+            this.messageRet = messageRet;
+        };
+        channel.basicConsume(queueNameRet, true, deliverCallback, consumerTag -&gt; { });
+    }
+
+    public String getMessageRet() {
+        return messageRet;
+    }
+
+    public void setMessageRet(String messageRet) {
+        this.messageRet = messageRet;
+    }
+}</code></pre><p id="2b9af5ed-6ac7-48cc-b4fa-9ef0e6a539a8" class="">
+</p><h2 id="58952259-7a11-4825-90fe-e10a34219e58" class="">Client</h2><h3 id="2857f288-3d43-4dd2-bbdb-0db1055dd2b6" class="">IdentityService</h3><pre id="a91e80c8-eea7-4c14-9db8-ae8dfbb6d116" class="code"><code>class TokenMapEntry {
+    long token;
+    long timestamp;
+    TokenMapEntry(long token, long timestamp) {
+        this.token = token;
+        this.timestamp = timestamp;
+    }
+}
+
+public class IdentityService {
+    private final static String QUEUE_AUTH = &quot;CATZ_AUTH&quot;;
+    private final static String QUEUE_AUTH_RET = &quot;CATZ_AUTH_RET&quot;;
+    private final static String QUEUE_VERIFY = &quot;CATZ_VERIFY&quot;;
+    private static final Map&lt;String, TokenMapEntry&gt; users_tokens = new HashMap&lt;&gt;();
+    private static final Map&lt;String, String&gt; users_pw = new HashMap&lt;&gt;();
+    private static final Random RND = new Random(42);
+    
+    public static void main(String[] args) throws Exception{
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.49.81&quot;);
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+        
+        channel.queueDeclare(QUEUE_AUTH, false, false, false, null);
+        channel.queueDeclare(QUEUE_AUTH_RET, false, false, false, null);
+        channel.queueDeclare(QUEUE_VERIFY, false, false, false, null);
+        
+        DeliverCallback authCallback = (consumerTag, delivery) -&gt; {
+            String message = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received in AUTH&#x27;&quot; + message + &quot;&#x27;&quot;);
+            
+            // retrieve user and pw
+            String[] msg_split = message.split(&quot;:&quot;);
+            if (msg_split.length != 2) {
+                System.out.println(&quot;skipping message &quot;+message);
+                return;
+            }
+            String user = msg_split[0];
+            String pw = msg_split[1];
+            
+            try {
+                MessageDigest digest = MessageDigest.getInstance(&quot;SHA-256&quot;);
+                byte[] hash = digest.digest(pw.getBytes(StandardCharsets.UTF_8));
+                String hash_str = bytesToHex(hash);
+                System.out.println(&quot;hashed &quot;+hash_str);
+                
+                // hash from db
+                Boolean user_contained = users_pw.containsKey(user);
+                if (!user_contained) {
+                    System.out.println(&quot;not in db&quot;);
+                    return;
+                }
+
+                String true_hash = users_pw.get(user);
+                
+                if (true_hash.equals(hash_str)) {
+                    System.out.println(&quot;authenticated&quot;);
+                    long new_token = RND.nextLong();
+                    long timestamp = System.currentTimeMillis();
+                    TokenMapEntry entry = new TokenMapEntry(new_token, timestamp);
+                    users_tokens.put(user, entry);
+                    channel.basicPublish(&quot;&quot;, QUEUE_AUTH_RET, null, String.valueOf(new_token).getBytes(&quot;UTF-8&quot;));
+                    System.out.println(&quot;new token &quot;+String.valueOf(new_token));
+                } else {
+                    System.out.println(&quot;not authenticated&quot;);
+                    channel.basicPublish(&quot;&quot;, QUEUE_AUTH_RET, null, &quot;NO&quot;.getBytes(&quot;UTF-8&quot;));
+                }
+
+            } catch (NoSuchAlgorithmException ex) {
+                System.out.println(&quot;mucho errore&quot;);
+            }
+            
+        };
+        
+        DeliverCallback verifyCallback = (consumerTag, delivery) -&gt; {
+            String message = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received in VERIFY&#x27;&quot; + message + &quot;&#x27;&quot;);
+        };
+        
+        channel.basicConsume(QUEUE_AUTH, true, authCallback, consumerTag -&gt; { });
+        channel.basicConsume(QUEUE_VERIFY, true, authCallback, consumerTag -&gt; { });
+        
+        String dummy_hash = &quot;30C952FAB122C3F9759F02A6D95C3758B246B4FEE239957B2D4FEE46E26170C4&quot;;
+        users_pw.put(&quot;user&quot;, dummy_hash);
+        String message = &quot;user:pw&quot;;
+        channel.basicPublish(&quot;&quot;, QUEUE_AUTH, null, message.getBytes(&quot;UTF-8&quot;));
+        System.out.println(&quot;message sent&quot;);
+    }
+    
+    private static String bytesToHex(byte[] hash) {
+        return DatatypeConverter.printHexBinary(hash);
+    }
+}</code></pre><h3 id="d7a28bc3-662a-4cc2-bb48-c2aefc210805" class="">CatalogMS</h3><pre id="85cbfb59-da2e-4e33-bd20-23b31f24d0b2" class="code"><code>public class CatalogMS {
+    private final static String QUEUE_NAME = &quot;CATZ_CATALOG&quot;;
+    private final static String QUEUE_NAME_RET = &quot;CATZ_CATALOG_RET&quot;;
+    private final static String HOST = &quot;192.168.49.81&quot;;
+
+    public static void main(String[] argv) throws Exception {
+        
+        // CREATE PRODUCTS
+        Products prod = new Products();
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Control&quot;);
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Durex&quot;);
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Akuel&quot;);
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Pesante&quot;);
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Esp&quot;);
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Masculan&quot;);
+        for(int i=0;i&lt;10;i++)prod.addProduct(&quot;Serena&quot;);
+        
+        // JSON CATALOG
+        JsonArray jcat = new JsonArray();
+        List&lt;Product&gt; lprods = prod.getProducts();
+        for(int i=0;i&lt;lprods.size();i++){
+            Product p = lprods.get(i);
+            JsonObject jp = new JsonObject();
+            jp.addProperty(&quot;name&quot;, p.getName());
+            jp.addProperty(&quot;id&quot;, p.getId());
+            jcat.add(jp);
+        }
+        //-------------------------------------------------
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(HOST);
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+
+        // RECEIVE QUEUE
+        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        System.out.println(&quot; [*] Waiting for messages. To exit press CTRL+C&quot;);
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -&gt; {
+            String message = new String(delivery.getBody(), &quot;UTF-8&quot;);
+            System.out.println(&quot; [x] Received &#x27;&quot; + message + &quot;&#x27;&quot;);
+            if(message.equals(&quot;DammeErCatalogo&quot;)){
+                System.out.println(&quot;\t-&gt;Sending Catalog&quot;);
+                channel.basicPublish(&quot;&quot;, QUEUE_NAME_RET, null,jcat.toString().getBytes(&quot;UTF-8&quot;));
+            System.out.println(&quot; [x] Sent &#x27;&quot; + message + &quot;&#x27;&quot;);
+                
+            }
+        };
+        // SEND QUEUE
+            channel.queueDeclare(QUEUE_NAME_RET, false, false, false, null);
+
+            
+        // START CONSUME
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -&gt; { });
+        
+    }
+}</code></pre><h3 id="49aa92bc-55b3-4e70-a604-ac4f2e22a861" class="">Products</h3><pre id="e32b9e9c-73dd-4db0-b96b-f681fe72e882" class="code"><code>public class Products{
+    private ArrayList&lt;Product&gt; products;
+    public Products(){
+        products = new ArrayList&lt;Product&gt;();
+    }
+    
+    public void addProduct(String name){
+        Stream&lt;Product&gt; stream = this.products.stream();
+        Stream&lt;Integer&gt; ids = stream.map(p -&gt; new Integer(p.getId()));
+ 
+        Object[] idsArray;
+        idsArray = ids.toArray();
+        Random rand = new Random();
+        int idx;
+        while(true){
+            idx = rand.nextInt();
+            boolean used = false;
+            for (int i = 0;i&lt;idsArray.length;i++){
+                if(idsArray[i].equals(new Integer(idx))){
+                    used = true;
+                    break;
+                }
+            }
+            if(!used)break;
+            else continue;  
+        }
+        Product p = new Product(idx,name);
+        this.products.add(p);
+ 
+    }
+    
+    public List&lt;Product&gt; getProducts(){
+        return (List&lt;Product&gt;)this.products.clone();
+    }
+}</code></pre><h3 id="7eabbb94-9fb6-4c9a-81c1-da6b76f3d909" class="">Product</h3><pre id="489a0404-93d1-4d6d-b90a-b53f3098011e" class="code"><code>public class Product {
+    final private int id;
+    private String Name;
+    
+    public Product(int id,String Name){
+        this.id = id;
+        this.Name = Name;
+    }
+    
+    public int getId(){return this.id;}
+    public String getName(){return this.Name;}
+    
+}</code></pre><p id="ab1cccfd-c28f-457c-be2f-2d334fbba17e" class="">
+</p></div></article></body></html>

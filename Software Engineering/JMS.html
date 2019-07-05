@@ -1,0 +1,967 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>JMS</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif; }
+.mono { font-family: Nitti, 'Microsoft YaHei', '微软雅黑', monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, KaiTi, STKaiTi, '华文楷体', KaiTi_GB2312, '楷体_GB2312', serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, Nitti, 'Microsoft YaHei', '微软雅黑', monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a0a54f96-a61f-4940-933e-681458460500" class="page sans"><header><h1 class="page-title">JMS</h1></header><div class="page-body"><p id="7afec6f5-8270-45c6-9efd-3adf5f11cf5b" class="">
+</p><figure id="b41d6786-4439-45f6-a958-6e50537d4145" class="image"><a href="JMS/Untitled.png"><img style="width:336px" src="JMS/Untitled.png"/></a></figure><h2 id="8946ce38-306b-43bb-a9d6-0a54ca2cf030" class="">Server</h2><h3 id="bfe9d3a0-fb37-4948-9b41-6a77a5c29e5f" class="">Main</h3><pre id="b057eb8f-ac36-4a6d-9895-b7a5a0d26eeb" class="code"><code>public class StockMarketServer {
+    //I create the two object that run on the server side
+	public static void main(String args[]) throws Exception {
+        NotificatoreAcquisto n = new NotificatoreAcquisto();
+        n.start();
+        ProduttoreQuotazioni q = new ProduttoreQuotazioni();
+        q.start();
+	}
+}</code></pre><h3 id="5b4e1cfc-b1f1-4874-9a58-db5a33ddb514" class="">ProduttoreQuotazioni</h3><pre id="6153b8bf-a64a-45d7-a934-457d157b5e1c" class="code"><code>public class ProduttoreQuotazioni {
+	final String titoli[] = { &quot;Telecom&quot;, &quot;Finmeccanica&quot;, &quot;Banca_Intesa&quot;,
+			&quot;Oracle&quot;, &quot;Parmalat&quot;, &quot;Mondadori&quot;, &quot;Vodafone&quot;, &quot;Barilla&quot; };
+
+	private String scegliTitolo() {
+		int whichMsg;
+		Random randomGen = new Random();
+		whichMsg = randomGen.nextInt(this.titoli.length);
+		return this.titoli[whichMsg];
+	}
+
+	private float valore() {
+		Random randomGen = new Random();
+		float val = randomGen.nextFloat() * this.titoli.length * 10;
+		return val;
+	}
+
+    private static final Logger LOG = LoggerFactory.getLogger(ProduttoreQuotazioni.class);
+
+	public void start() throws NamingException, JMSException {
+
+        //initialize all the object for JNDI
+        Context jndiContext = null;
+        ConnectionFactory connectionFactory = null;
+        Connection connection = null;
+        Session session = null;
+        Destination destination = null;
+        MessageProducer producer = null;
+        String destinationName = &quot;dynamicTopics/Quotazioni&quot;;
+
+        /*
+         * Create a JNDI API InitialContext object
+         */
+        try {
+            Properties props = new Properties();
+            props.setProperty(Context.INITIAL_CONTEXT_FACTORY,&quot;org.apache.activemq.jndi.ActiveMQInitialContextFactory&quot;);
+            props.setProperty(Context.PROVIDER_URL,&quot;tcp://localhost:61616&quot;);
+            jndiContext = new InitialContext(props);
+        } catch (NamingException e) {
+            LOG.info(&quot;ERROR in JNDI: &quot; + e.toString());
+            System.exit(1);
+        }
+
+        /*
+         * Look up connection factory and destination.
+         */
+        try {
+            connectionFactory = (ConnectionFactory)jndiContext.lookup(&quot;ConnectionFactory&quot;);
+            destination = (Destination)jndiContext.lookup(destinationName);
+        } catch (NamingException e) {
+            LOG.info(&quot;JNDI API lookup failed: &quot; + e);
+            System.exit(1);
+        }
+
+        /*
+         * Create connection. Create session from connection; false means
+         * session is not transacted. Create sender and text message. Send
+         * messages, varying text slightly. Send end-of-messages message.
+         * Finally, close connection.
+         */
+        try {
+            //from connectionfactory I create the session and from the
+            //session I create the producer
+            //now my producer is ablet o send message through quotazioni
+            connection = connectionFactory.createConnection();
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            producer = session.createProducer(destination);
+
+            TextMessage message = null;
+            String messageType = null;
+            message = session.createTextMessage();
+
+            float quotazione;
+            int i = 0;
+            while (true) { //continuously I send message
+                i++;
+                messageType = scegliTitolo();
+                quotazione = valore();
+                //initialize the properies
+                message.setStringProperty(&quot;Nome&quot;, messageType);
+                message.setFloatProperty(&quot;Valore&quot;, quotazione);
+                //main text
+                message.setText(
+                        &quot;Item &quot; + i + &quot;: &quot; + messageType + &quot;, Valore: &quot;
+                        + quotazione);
+                //in the log I put what I send
+                LOG.info(
+                    this.getClass().getName() +
+                        &quot;Invio quotazione: &quot; + message.getText());
+                producer.send(message);
+                try {
+                    Thread.sleep(5000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } catch (JMSException e) {
+            LOG.info(&quot;Exception occurred: &quot; + e);
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (JMSException e) {
+                }
+            }
+        }
+    }
+}</code></pre><h3 id="709453e2-7090-40d9-8ef4-4c030e39fc63" class="">NotificatoreAcquisto</h3><pre id="d1217a25-e078-4685-9c6e-a48b850ca35e" class="code"><code>public class NotificatoreAcquisto implements MessageListener {
+
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(NotificatoreAcquisto.class);
+
+    Properties properties = null;
+    Context jndiContext = null;
+	private TopicConnectionFactory connectionFactory = null;
+	private TopicConnection connection = null;
+	private TopicSession session = null;
+	private Topic destination = null;
+	private TopicSubscriber subscriber = null;
+	private TopicPublisher publisher = null;
+
+	private Random randomGen = new Random();
+
+	public void start() throws NamingException, JMSException {
+
+        InitialContext ctx = null;
+
+        try {
+                properties = new Properties();
+                properties.setProperty(Context.INITIAL_CONTEXT_FACTORY,&quot;org.apache.activemq.jndi.ActiveMQInitialContextFactory&quot;);
+                properties.setProperty(Context.PROVIDER_URL,&quot;tcp://localhost:61616&quot;);
+                jndiContext = new InitialContext(properties);
+        } catch (NamingException e) {
+            LOG.info(&quot;ERROR in JNDI: &quot; + e.toString());
+            System.exit(1);
+        }
+
+		ctx = new InitialContext(properties);
+		this.connectionFactory = (TopicConnectionFactory) ctx.lookup(&quot;ConnectionFactory&quot;);
+		this.destination = (Topic) ctx.lookup(&quot;dynamicTopics/Ordini&quot;);
+
+        //here I create the two arrow from and to Ordini
+		this.connection = this.connectionFactory.createTopicConnection();
+		this.session = this.connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+		this.subscriber = this.session.createSubscriber(this.destination, null, true);
+		this.publisher = this.session.createPublisher(this.destination);
+		this.connection.start();
+
+		Logger.getLogger(this.getClass().getName()).info(&quot;In attesa di richieste di acquisto...&quot;);
+
+		subscriber.setMessageListener(this);
+	}
+
+    //when I receive a message I elaborate it and send a reply
+	public void onMessage(Message mex) {
+		TextMessage message;
+		String utente = null;
+		String nome = null;
+		float prezzo;
+		int quantita;
+		boolean status = randomGen.nextFloat() &lt; 0.5;
+		try {
+            //I should know that the message is Text type, the interface doesn&#x27;t tell me it
+			message = (TextMessage) mex;
+			utente = message.getStringProperty(&quot;Utente&quot;);
+			nome = message.getStringProperty(&quot;Nome&quot;);
+			prezzo = message.getFloatProperty(&quot;Prezzo&quot;);
+			quantita = message.getIntProperty(&quot;Quantita&quot;);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		try {
+            //I read the message in the previuos part and I respond to it
+			session = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+			publisher = session.createPublisher(destination);
+
+			message = session.createTextMessage();
+			message.setStringProperty(&quot;Utente&quot;, utente);
+			message.setStringProperty(&quot;Nome&quot;, nome);
+			message.setBooleanProperty(&quot;Status&quot;, status);
+			message.setIntProperty(&quot;Quantita&quot;, quantita);
+			message.setFloatProperty(&quot;Prezzo&quot;, prezzo);
+
+			Logger.getLogger(
+					this.getClass().getName()
+				).info(
+					&quot;************************************************&quot; + &quot;\n&quot; +
+					&quot;Notifica richiesta di acquisto&quot; + &quot;\n&quot; +
+					&quot;ID utente: &quot; + utente + &quot;\n&quot; +
+					&quot;Titolo: &quot; + nome + &quot;\n&quot; +
+					&quot;Quantit\u00e0: &quot; + quantita + &quot;\n&quot; +
+					&quot;Prezzo: &quot; + prezzo + &quot;\n&quot; +
+					&quot;Accettato: &quot; + status + &quot;\n&quot; +
+					&quot;************************************************&quot;
+				);
+
+			publisher.send(message); //I send the reply
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
+	}
+}</code></pre><h2 id="4270bb14-b34b-4f9a-b9d3-38774a671c22" class="">Client</h2><h3 id="5b23a3b7-5160-454a-9796-e1dc8ba9e1ce" class="">Main</h3><pre id="2ae72e4f-5e51-45cc-beac-78a233ce7a42" class="code"><code>public class StockMarketClient {
+	public static void main(String[] args) {
+            AzioniFrame a = new AzioniFrame();
+	}
+}</code></pre><h3 id="4e0a440e-6ba2-4e13-ab4e-063e3fc31c7b" class="">CompraJMSManager</h3><pre id="7c2e099e-1991-4f22-a7d5-5e5d3454c708" class="code"><code>public class CompraJMSManager extends Observable implements MessageListener {
+	
+        Properties properties = null;
+        Context jndiContext = null;
+	private TopicConnectionFactory connectionFactory = null;
+	private TopicConnection connection = null;
+	private TopicSession session = null;
+	private Topic destination = null;
+	private TopicSubscriber sub;
+        private TopicPublisher topicPublisher;
+        
+
+	public CompraJMSManager(Observer osservatore) {
+		super.addObserver(osservatore);
+                System.out.println(&quot;COMPRANDO&quot;);
+		try {
+			
+                    InitialContext ctx = null;
+                    properties = new Properties();
+		    properties.setProperty(Context.INITIAL_CONTEXT_FACTORY,&quot;org.apache.activemq.jndi.ActiveMQInitialContextFactory&quot;);
+                    properties.setProperty(Context.PROVIDER_URL,&quot;tcp://localhost:61616&quot;);
+                    jndiContext = new InitialContext(properties);        
+                
+                    ctx = new InitialContext(properties);
+		    this.connectionFactory =
+			(TopicConnectionFactory) ctx.lookup(&quot;ConnectionFactory&quot;);
+		    this.destination =
+			(Topic) ctx.lookup(&quot;dynamicTopics/Ordini&quot;);
+
+		    this.connection =
+			this.connectionFactory.createTopicConnection();
+		    this.session =
+			this.connection.createTopicSession(
+					false, Session.AUTO_ACKNOWLEDGE
+				);
+                 this.topicPublisher = session.createPublisher(destination);
+		} catch (NamingException err) {
+			err.printStackTrace();
+		} catch (JMSException err) {
+			err.printStackTrace();
+		} 
+	}
+	
+        public boolean compra(String nome, float prezzo, int quantita) {
+		String utente = Utente.getInstance().getUtente();
+		
+		if (utente == null)
+			return false;
+		
+		try {
+			TextMessage sendMex = session.createTextMessage();
+			
+			sendMex.setStringProperty(&quot;Utente&quot;,
+					utente
+				);
+			sendMex.setStringProperty(&quot;Nome&quot;,
+					nome
+				);
+			sendMex.setFloatProperty(&quot;Prezzo&quot;,
+					prezzo
+				);
+
+			sendMex.setIntProperty(&quot;Quantita&quot;, quantita);
+			String query =
+					&quot;Utente = &#x27;&quot; + utente + &quot;&#x27;&quot; +
+					&quot; AND &quot; +
+					&quot;Nome = &#x27;&quot; + nome + &quot;&#x27;&quot;;
+			sub = session.createSubscriber(destination, query, true);
+			sub.setMessageListener(this);
+			connection.start();
+			topicPublisher.publish(sendMex);
+		} catch (JMSException err) {
+			err.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Invocato quando la notifica positiva o negativa dell&#x27;acquisto giunge a
+	 * destinazione
+	 * 
+	 * @param mex
+	 *            Il messaggio di notifica.
+	 */
+	public void onMessage(Message mex) {
+		String infoMex = null;
+		try {
+			TextMessage recMex = (TextMessage) mex;
+			
+			if (recMex != null)
+				if (recMex.getBooleanProperty(&quot;Status&quot;))
+					infoMex = &quot;L&#x27;acquisto \u00e8 andato a buon fine&quot;;
+				else
+					infoMex = &quot;L&#x27;acquisto non \u00e8 andato a buon fine&quot;;
+			/*
+			 * Chiude la connessione del subscriber asincrono in modo da non
+			 * ricevere altri messaggi di notifica
+			 */
+			sub.close();
+		} catch (NumberFormatException err) {
+			infoMex = &quot;Errore nel riempimento di alcuni campi&quot;;
+		} catch (JMSException err) {
+			err.printStackTrace();
+		}
+		
+		if (infoMex != null) {
+			super.setChanged();	// rende attivo il cambiamento di stato
+			super.notifyObservers(infoMex);
+		}
+	}
+}</code></pre><h3 id="7bea401a-a627-4133-b9df-abb1a9046e07" class="">AzioniJMSListener</h3><pre id="44e64951-6639-4c9e-85d9-434729601b47" class="code"><code>public class AzioniJMSListener extends Observable implements MessageListener {
+
+    private TopicConnection topicConnection;
+    private TopicSession topicSession = null;
+    private Destination destination = null;
+    private MessageProducer producer = null;
+
+    public AzioniJMSListener(Observer[] osservatori) {
+
+        for (Observer osservatore : osservatori) {
+            System.out.println(osservatore);
+            super.addObserver(osservatore);
+        }
+
+        Context jndiContext = null;
+        ConnectionFactory topicConnectionFactory = null;
+
+        String destinationName = &quot;dynamicTopics/Quotazioni&quot;;
+
+        try {
+
+            Properties props = new Properties();
+
+            props.setProperty(Context.INITIAL_CONTEXT_FACTORY, &quot;org.apache.activemq.jndi.ActiveMQInitialContextFactory&quot;);
+            props.setProperty(Context.PROVIDER_URL, &quot;tcp://localhost:61616&quot;);
+            jndiContext = new InitialContext(props);
+
+            topicConnectionFactory = (ConnectionFactory) jndiContext.lookup(&quot;ConnectionFactory&quot;);
+            destination = (Destination) jndiContext.lookup(destinationName);
+            topicConnection = (TopicConnection) topicConnectionFactory.createConnection();
+            topicSession = (TopicSession) topicConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+            TopicSubscriber topicSubscriber
+                    = topicSession.createSubscriber((Topic) destination);
+
+            topicSubscriber.setMessageListener(this);
+        } catch (JMSException err) {
+            err.printStackTrace();
+        } catch (NamingException err) {
+            err.printStackTrace();
+        }
+    }
+
+    /**
+     * Chiude la ricezione dei messaggi sulla topic quotazioni
+     */
+    public void stop() {
+        try {
+            topicConnection.stop();
+        } catch (JMSException err) {
+            err.printStackTrace();
+        }
+    }
+
+    /**
+     * Apre la ricezione dei messaggi sulla topic quotazioni
+     */
+    public void start() {
+        try {
+            topicConnection.start();
+        } catch (JMSException err) {
+            err.printStackTrace();
+        }
+    }
+
+    public void onMessage(Message mex) {
+        try {
+            String nome = mex.getStringProperty(&quot;Nome&quot;);
+            float valore = mex.getFloatProperty(&quot;Valore&quot;);
+
+            Quotazione quotazione = new Quotazione(nome, valore);
+
+            super.setChanged();	// rende attivo il cambiamento di stato
+            super.notifyObservers(quotazione);
+        } catch (JMSException err) {
+            err.printStackTrace();
+        }
+    }
+
+}</code></pre></div></article></body></html>
